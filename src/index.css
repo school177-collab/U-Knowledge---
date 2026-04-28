@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@100;400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Pretendard", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-neon-blue: #00f2ff;
+  --color-neon-purple: #9d00ff;
+}
+
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+.glow-text {
+  text-shadow: 0 0 10px rgba(0, 242, 255, 0.4);
+}
+
+.glass {
+  @apply bg-[#151619]/60 backdrop-blur-xl border border-white/10;
+}

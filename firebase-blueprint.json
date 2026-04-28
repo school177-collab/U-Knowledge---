@@ -1,0 +1,85 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "role": { "type": "string", "enum": ["student", "teacher", "admin"] },
+        "grade": { "type": "number" },
+        "class": { "type": "number" },
+        "number": { "type": "number" },
+        "points": { "type": "number" },
+        "bio": { "type": "string" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Question": {
+      "title": "Question",
+      "description": "A student question",
+      "type": "object",
+      "properties": {
+        "content": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorGrade": { "type": "number" },
+        "authorClass": { "type": "number" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "category": { "type": "string" },
+        "likesCount": { "type": "number" },
+        "commentsCount": { "type": "number" },
+        "aiFeedback": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["content", "authorId", "createdAt"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "Comment on a question",
+      "type": "object",
+      "properties": {
+        "questionId": { "type": "string" },
+        "content": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["questionId", "content", "authorId", "createdAt"]
+    },
+    "Event": {
+      "title": "Event",
+      "description": "School announcement or question event",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "description": { "type": "string" },
+        "type": { "type": "string" }
+      },
+      "required": ["title", "date"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/questions/{questionId}": {
+      "schema": "Question",
+      "description": "Main question board"
+    },
+    "/questions/{questionId}/comments/{commentId}": {
+      "schema": "Comment",
+      "description": "Comments on specific questions"
+    },
+    "/events/{eventId}": {
+      "schema": "Event",
+      "description": "Upcoming school events"
+    }
+  }
+}
