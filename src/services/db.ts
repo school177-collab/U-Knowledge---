@@ -79,6 +79,14 @@ export async function createQuestion(question: Partial<Question>) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
+    
+    // Award 10 points to student
+    if (question.authorId) {
+      await updateDoc(doc(db, 'users', question.authorId), {
+        points: increment(10)
+      });
+    }
+    
     return newDocRef.id;
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, path);
@@ -106,12 +114,19 @@ export function subscribeEvents(callback: (events: SchoolEvent[]) => void) {
   });
 }
 
-export async function likeQuestion(questionId: string) {
+export async function likeQuestion(questionId: string, authorId?: string) {
   const path = `questions/${questionId}`;
   try {
     await updateDoc(doc(db, 'questions', questionId), {
       likesCount: increment(1)
     });
+    
+    // Award 5 points to the question author
+    if (authorId) {
+      await updateDoc(doc(db, 'users', authorId), {
+        points: increment(5)
+      });
+    }
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, path);
   }

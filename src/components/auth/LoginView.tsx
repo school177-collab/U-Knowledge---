@@ -16,7 +16,11 @@ export function LoginView() {
       console.log("Login successful!");
     } catch (e: any) {
       console.error("Login failed error object:", e);
-      alert(`로그인에 실패했습니다: ${e.message || '알 수 없는 오류'}\n브라우저의 팝업 차단 설정을 확인해주세요.`);
+      if (e.code === 'auth/unauthorized-domain' || e.message?.includes('unauthorized-domain')) {
+        alert(`로그인 도메인 승인이 필요합니다.\n\nFirebase 콘솔 > Authentication > Settings > Authorized domains 에 현재 도메인을 추가해주세요.\n\n현재 도메인: ${window.location.hostname}`);
+      } else {
+        alert(`로그인에 실패했습니다: ${e.message || '알 수 없는 오류'}\n브라우저의 팝업 차단 설정을 확인해주세요.`);
+      }
     } finally {
       setLoading(false);
     }

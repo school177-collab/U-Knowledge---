@@ -5,6 +5,7 @@ import { Sparkles, MessageCircle, Database, BookOpen, Star, HelpCircle, Zap, Tre
 import { cn } from '../../lib/utils';
 import { QuestionBoard } from './QuestionBoard';
 import { RankingList } from './RankingList';
+import { ClassRanking } from './ClassRanking';
 
 export function StudentDashboard({ onNavigate }: { onNavigate: (mode: any) => void }) {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'questions' | 'ranking'>('dashboard');
@@ -96,7 +97,7 @@ function DashboardContent({ onNavigate }: { onNavigate: (mode: any) => void }) {
 
       {/* Class Rankings Sidebar */}
       <div className="space-y-8">
-        <RankingList title="학급별 질문 순위" />
+        <ClassRanking />
         
         {/* Recruitment Micro-banner */}
         <div 

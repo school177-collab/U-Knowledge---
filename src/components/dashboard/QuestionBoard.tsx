@@ -284,7 +284,7 @@ function QuestionCard({ question, index }: { question: Question; index: number }
            {/* Actions */}
            <div className="flex items-center gap-8 pt-2">
              <button 
-               onClick={() => likeQuestion(question.id)}
+               onClick={() => likeQuestion(question.id, question.authorId)}
                className="flex items-center gap-2 text-slate-400 hover:text-brand-primary transition-all text-xs font-black group"
              >
                <div className={cn(

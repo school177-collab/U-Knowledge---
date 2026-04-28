@@ -5,6 +5,7 @@ import { LayoutDashboard, Users, FileText, Bell, Search, Database, TrendingUp, U
 import { cn } from '../../lib/utils';
 import { RankingList } from './RankingList';
 import { QuestionBoard } from './QuestionBoard';
+import { ClassRanking } from './ClassRanking';
 
 export function TeacherDashboard() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'archive' | 'monitoring' | 'ranking'>('dashboard');
@@ -38,8 +39,8 @@ export function TeacherDashboard() {
         {activeTab === 'monitoring' && <QuestionBoard key="monitor" />}
         {activeTab === 'ranking' && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-             <RankingList title="MVP 학생 선정" limit={10} />
-             <RankingList title="학급 활동량 시상 데이터" limit={10} />
+             <ClassRanking />
+             <RankingList title="MVP 학생 선정 (개인)" limit={10} />
           </div>
         )}
       </AnimatePresence>
