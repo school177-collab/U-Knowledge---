@@ -71,8 +71,12 @@ export function Navbar({ viewMode, setViewMode }: NavbarProps) {
 
             {showSettings && (
               <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-slate-100 p-4 animate-in fade-in slide-in-from-top-2">
+                <div className="flex justify-between items-center mb-4">
+                  <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Profile Settings</p>
+                  <button onClick={() => setShowSettings(false)} className="text-slate-300 hover:text-slate-500"><Check size={14} /></button>
+                </div>
                 <div className="mb-4">
-                  <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Grade Selection</p>
+                  <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Grade (학년 선택)</p>
                   <div className="grid grid-cols-3 gap-2">
                     {[1, 2, 3].map(g => (
                       <button 
@@ -80,7 +84,7 @@ export function Navbar({ viewMode, setViewMode }: NavbarProps) {
                         onClick={() => handleUpdateGradeClass(g, profile?.class || 1)}
                         className={cn(
                           "py-2 rounded-lg text-xs font-bold transition-all",
-                          profile?.grade === g ? "bg-brand-primary text-white" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                          profile?.grade === g ? "bg-brand-primary text-white shadow-md shadow-brand-primary/20" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
                         )}
                       >
                         {g}학년
@@ -89,7 +93,7 @@ export function Navbar({ viewMode, setViewMode }: NavbarProps) {
                   </div>
                 </div>
                 <div>
-                   <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Class Selection</p>
+                   <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Class (반 선택: 1-9반)</p>
                    <div className="grid grid-cols-5 gap-2">
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(c => (
                         <button 
@@ -97,13 +101,21 @@ export function Navbar({ viewMode, setViewMode }: NavbarProps) {
                           onClick={() => handleUpdateGradeClass(profile?.grade || 1, c)}
                           className={cn(
                             "py-2 rounded-lg text-[10px] font-bold transition-all",
-                            profile?.class === c ? "bg-brand-primary text-white" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                            profile?.class === c ? "bg-brand-primary text-white shadow-md shadow-brand-primary/20" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
                           )}
                         >
                           {c}반
                         </button>
                       ))}
                    </div>
+                </div>
+                <div className="mt-4 pt-4 border-t border-slate-50">
+                  <button 
+                    onClick={() => { alert('로그아웃 하시겠습니까?'); logout(); }}
+                    className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-black text-red-500 hover:bg-red-50 transition-all"
+                  >
+                    <LogOut size={14} /> 로그아웃
+                  </button>
                 </div>
               </div>
             )}

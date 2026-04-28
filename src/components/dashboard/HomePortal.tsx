@@ -148,7 +148,13 @@ export function HomePortal({ onNavigate }: { onNavigate: (mode: any) => void }) 
                      </div>
                      <h3 className="text-xl font-black text-slate-800 mb-3">이달의 우수 질문</h3>
                      <p className="text-sm text-slate-400 font-bold mb-8 leading-relaxed">학년별 우수 질문자 각 3명 선정 및 특별 베네핏 증정</p>
-                     <Button variant="secondary" className="w-full rounded-2xl py-4 font-black">시상 내역 확인</Button>
+                     <Button 
+                       variant="secondary" 
+                       className="w-full rounded-2xl py-4 font-black"
+                       onClick={(e) => { e.stopPropagation(); alert('시상 내역 게시판 준비 중입니다.'); }}
+                     >
+                       시상 내역 확인
+                     </Button>
                   </Card>
                </div>
 

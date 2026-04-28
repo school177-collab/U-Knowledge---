@@ -11,9 +11,12 @@ export function LoginView() {
   const handleLogin = async () => {
     setLoading(true);
     try {
+      console.log("Login attempt started...");
       await login();
-    } catch (e) {
-      console.error(e);
+      console.log("Login successful!");
+    } catch (e: any) {
+      console.error("Login failed error object:", e);
+      alert(`로그인에 실패했습니다: ${e.message || '알 수 없는 오류'}\n브라우저의 팝업 차단 설정을 확인해주세요.`);
     } finally {
       setLoading(false);
     }

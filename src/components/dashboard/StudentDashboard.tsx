@@ -106,7 +106,13 @@ function DashboardContent({ onNavigate }: { onNavigate: (mode: any) => void }) {
            <div className="relative z-10">
               <h3 className="text-xl font-black mb-2">질문 탐정단 모집</h3>
               <p className="text-[10px] font-bold text-white/50 mb-6 leading-relaxed">우리 학교 질문 문화를 이끌어갈 "학생 탐정"을 찾습니다.</p>
-              <Button variant="portal" className="w-full py-4 rounded-xl">신청 하러가기</Button>
+              <Button 
+                variant="portal" 
+                className="w-full py-4 rounded-xl hover:bg-white hover:text-indigo-900 transition-all font-black"
+                onClick={(e) => { e.stopPropagation(); onNavigate('recruitment'); }}
+              >
+                신청 하러가기
+              </Button>
            </div>
            <div className="absolute top-[-20%] right-[-10%] w-32 h-32 bg-white/10 rounded-full blur-2xl transition-transform duration-1000 group-hover:scale-150" />
         </div>

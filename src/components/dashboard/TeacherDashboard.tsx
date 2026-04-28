@@ -33,7 +33,7 @@ export function TeacherDashboard() {
       </div>
 
       <AnimatePresence mode="wait">
-        {activeTab === 'dashboard' && <TeacherMain key="main" />}
+        {activeTab === 'dashboard' && <TeacherMain key="main" onTabChange={setActiveTab} />}
         {activeTab === 'archive' && <TeacherArchive key="archive" />}
         {activeTab === 'monitoring' && <QuestionBoard key="monitor" />}
         {activeTab === 'ranking' && (
@@ -47,7 +47,7 @@ export function TeacherDashboard() {
   );
 }
 
-function TeacherMain() {
+function TeacherMain({ onTabChange }: { onTabChange: (tab: any) => void }) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="space-y-8">
@@ -60,8 +60,8 @@ function TeacherMain() {
                   데이터로 <span className="text-brand-primary">지원</span>하는<br />질문 중심 수업 모델
                 </h2>
                 <div className="flex gap-4">
-                   <Button variant="primary" className="rounded-2xl px-8 py-5 text-base shadow-xl shadow-brand-primary/20" onClick={() => setActiveTab('archive')}>자료 관리 <Database size={18} className="ml-2" /></Button>
-                   <Button variant="secondary" className="rounded-2xl px-8 py-5 text-base" onClick={() => setActiveTab('monitoring')}>활동 게시판</Button>
+                   <Button variant="primary" className="rounded-2xl px-8 py-5 text-base shadow-xl shadow-brand-primary/20" onClick={() => onTabChange('archive')}>자료 관리 <Database size={18} className="ml-2" /></Button>
+                   <Button variant="secondary" className="rounded-2xl px-8 py-5 text-base" onClick={() => onTabChange('monitoring')}>활동 게시판</Button>
                 </div>
              </div>
              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-80 h-80 opacity-[0.03] rotate-12 text-brand-primary">
