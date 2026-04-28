@@ -152,6 +152,19 @@ export function subscribeComments(questionId: string, callback: (comments: Comme
 }
 
 // Ranking Services
+export async function updateUserProfile(uid: string, data: Partial<UserProfile>) {
+  const path = `users/${uid}`;
+  try {
+    await updateDoc(doc(db, 'users', uid), {
+      ...data,
+      updatedAt: serverTimestamp(),
+    });
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, path);
+  }
+}
+
+// Ranking Services
 export function subscribeRankings(callback: (rankings: any[]) => void) {
   const q = query(collection(db, 'questions'), orderBy('likesCount', 'desc'), limit(10));
   return onSnapshot(q, (snapshot) => {

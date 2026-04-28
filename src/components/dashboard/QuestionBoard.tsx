@@ -27,6 +27,14 @@ export function QuestionBoard() {
   const [name, setName] = useState(profile?.displayName || '');
 
   useEffect(() => {
+    if (profile) {
+      setGrade(profile.grade || 1);
+      setClassNum(profile.class || 1);
+      setName(profile.displayName || '');
+    }
+  }, [profile]);
+
+  useEffect(() => {
     return subscribeQuestions(setQuestions);
   }, []);
 

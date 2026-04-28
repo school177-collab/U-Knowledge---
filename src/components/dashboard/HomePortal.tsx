@@ -5,7 +5,7 @@ import { Calendar, ChevronRight, Trophy, BookOpen, Users, Settings, Database, Li
 import { cn } from '../../lib/utils';
 import { RankingList } from './RankingList';
 
-export function HomePortal() {
+export function HomePortal({ onNavigate }: { onNavigate: (mode: any) => void }) {
   const [timeLeft, setTimeLeft] = useState({ d: 18, h: 0, m: 0, s: 0 });
 
   useEffect(() => {
@@ -39,10 +39,10 @@ export function HomePortal() {
           </p>
         </div>
         <div className="flex flex-wrap gap-4">
-           <Button variant="primary" className="px-8 py-5 rounded-[24px] text-lg">
+           <Button variant="primary" className="px-8 py-5 rounded-[24px] text-lg" onClick={() => alert('질문 페스티벌 일정과 장소를 확인합니다.')}>
               <MessageCircle size={20} /> 질문 페스티벌 안내
            </Button>
-           <Button variant="portal" className="px-8 py-5 rounded-[24px] text-lg text-slate-600">
+           <Button variant="portal" className="px-8 py-5 rounded-[24px] text-lg text-slate-600" onClick={() => alert('운영 가이드 문서를 불러옵니다.')}>
               <Info size={20} className="text-slate-400" /> 운영 가이드
            </Button>
         </div>
@@ -77,7 +77,10 @@ export function HomePortal() {
                     <span className="font-bold text-lg">2026. 05. 12. 화요일 전체 학생 대상</span>
                 </div>
               </div>
-              <Button className="bg-brand-secondary text-white border-none w-fit px-10 py-5 rounded-2xl md:text-xl transform hover:scale-105 transition-all">
+              <Button 
+                onClick={() => onNavigate('student')}
+                className="bg-brand-secondary text-white border-none w-fit px-10 py-5 rounded-2xl md:text-xl transform hover:scale-105 transition-all"
+              >
                 사전 질문 남기기
               </Button>
            </div>
@@ -91,7 +94,7 @@ export function HomePortal() {
                 { month: '학기말', label: '탐구 한마당 예선' },
                 { month: '11월', label: '질문 페스티벌 본선' },
               ].map((step, idx) => (
-                <div key={idx} className="flex items-center gap-4 group cursor-pointer">
+                <div key={idx} className="flex items-center gap-4 group cursor-pointer" onClick={() => alert(`${step.label} 일정을 확인합니다.`)}>
                    <div className={cn(
                      "w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs shrink-0 transition-all",
                      step.active ? "bg-brand-secondary text-white scale-110 shadow-lg shadow-brand-secondary/30" : 
@@ -127,7 +130,7 @@ export function HomePortal() {
                </div>
 
                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <Card className="p-8 hover:scale-[1.02] transition-all">
+                  <Card className="p-8 hover:scale-[1.02] transition-all cursor-pointer" onClick={() => onNavigate('student')}>
                      <div className="w-16 h-16 rounded-3xl bg-indigo-50 text-brand-primary flex items-center justify-center mb-6">
                         <BookOpen size={32} />
                      </div>
@@ -139,7 +142,7 @@ export function HomePortal() {
                      </div>
                   </Card>
 
-                  <Card className="p-8 hover:scale-[1.02] transition-all">
+                  <Card className="p-8 hover:scale-[1.02] transition-all cursor-pointer" onClick={() => alert('학년별 시상 내역 게시판으로 이동합니다.')}>
                      <div className="w-16 h-16 rounded-3xl bg-amber-50 text-amber-500 flex items-center justify-center mb-6">
                         <Trophy size={32} />
                      </div>
@@ -149,9 +152,9 @@ export function HomePortal() {
                   </Card>
                </div>
 
-               <Card className="bg-slate-50/50 border-none relative overflow-hidden p-10">
+               <Card className="bg-slate-50/50 border-none relative overflow-hidden p-10 cursor-pointer group" onClick={() => onNavigate('recruitment')}>
                   <div className="flex flex-col md:flex-row items-center gap-12 relative z-10">
-                     <div className="w-48 h-48 rounded-[40px] bg-white portal-shadow flex items-center justify-center shrink-0 border border-slate-100 transform -rotate-3 hover:rotate-0 transition-transform">
+                     <div className="w-48 h-48 rounded-[40px] bg-white portal-shadow flex items-center justify-center shrink-0 border border-slate-100 transform -rotate-3 group-hover:rotate-0 transition-transform">
                         <div className="relative">
                            <Search size={64} className="text-brand-primary opacity-10" />
                            <div className="absolute inset-0 flex items-center justify-center">
@@ -189,7 +192,7 @@ export function HomePortal() {
 
             <Card title="#2 교사 활동" subtitle="교사 LAB & 아카이브">
                <div className="space-y-6">
-                  <div className="flex items-center gap-4 group cursor-pointer">
+                  <div className="flex items-center gap-4 group cursor-pointer" onClick={() => alert('질문 아카이브 데이터베이스를 확인합니다.')}>
                      <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                         <Database size={24} />
                      </div>
@@ -198,7 +201,7 @@ export function HomePortal() {
                         <p className="text-[10px] font-bold text-slate-400 capitalize">12개 교과군 데이터 통합</p>
                      </div>
                   </div>
-                  <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-all">
+                  <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-all" onClick={() => alert('교사 연구 공동체 정보를 확인합니다.')}>
                      <p className="text-xs font-black text-slate-700 mb-2">교원 공동체 활동 (교사 LAB)</p>
                      <div className="flex justify-between items-end">
                         <Badge variant="brand">2개 팀 구성 완료</Badge>
@@ -210,17 +213,17 @@ export function HomePortal() {
 
             <Card title="#3 시스템 & 공모전" className="bg-brand-secondary/[0.03] border-brand-secondary/20">
                <div className="space-y-6">
-                  <div className="p-6 bg-white rounded-3xl border border-brand-secondary/10 shadow-sm relative overflow-hidden group">
+                  <div className="p-6 bg-white rounded-3xl border border-brand-secondary/10 shadow-sm relative overflow-hidden group cursor-pointer" onClick={() => alert('공모전 가이드라인을 확인합니다.')}>
                      <div className="relative z-10">
                         <h4 className="text-sm font-black text-slate-800 mb-2">2026 수업 공모전</h4>
                         <p className="text-[10px] text-slate-400 font-bold leading-relaxed">제1차 질문 중심 수업 공모전 준비 중 (성적 상승 학생 베네핏 연계)</p>
                      </div>
                      <Star className="absolute bottom-[-10px] right-[-10px] text-brand-secondary/10 group-hover:scale-150 transition-transform" size={64} />
                   </div>
-                  <div className="p-6 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                  <div className="p-6 bg-white rounded-3xl border border-slate-100 shadow-sm group cursor-pointer" onClick={() => alert('데이터 통계 시스템을 호출합니다.')}>
                      <div className="flex justify-between mb-4">
                         <Badge variant="success">Support App</Badge>
-                        <Settings size={16} className="text-slate-300" />
+                        <Settings size={16} className="text-slate-300 group-hover:rotate-90 transition-transform" />
                      </div>
                      <h4 className="text-sm font-black text-slate-800 mb-2">질문 관리 프로그램</h4>
                      <p className="text-[10px] text-slate-400 font-bold">흐름 분석 및 정량적 데이터 통계 시스템</p>
@@ -233,7 +236,12 @@ export function HomePortal() {
                <div className="relative z-10">
                   <h3 className="text-2xl font-black mb-3 leading-tight text-white">질문 탐정단 모집</h3>
                   <p className="text-sm text-white/50 mb-10 font-medium">우리 학교 질문 문화를 바꿀 주인공, 학생 탐정단에 지금 합류하세요!</p>
-                  <Button className="w-full bg-white text-brand-primary font-black py-5 rounded-2xl text-lg hover:bg-white/90 transition-all">지금 바로 신청하기</Button>
+                  <Button 
+                    onClick={() => onNavigate('recruitment')}
+                    className="w-full bg-white text-brand-primary font-black py-5 rounded-2xl text-lg hover:bg-white/90 transition-all"
+                  >
+                    지금 바로 신청하기
+                  </Button>
                </div>
                <div className="absolute top-[-10%] right-[-10%] w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none" />
             </div>

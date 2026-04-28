@@ -8,7 +8,9 @@ import { Navbar } from './components/layout/Navbar';
 import { FloatingAI } from './components/dashboard/FloatingAI';
 import { motion, AnimatePresence } from 'motion/react';
 
-type ViewMode = 'portal' | 'student' | 'teacher';
+import { RecruitmentBoard } from './components/dashboard/RecruitmentBoard';
+
+type ViewMode = 'portal' | 'student' | 'teacher' | 'recruitment';
 
 function MainApp() {
   const { user, loading } = useAuth();
@@ -43,9 +45,10 @@ function MainApp() {
             exit={{ opacity: 0, x: -10 }}
             transition={{ duration: 0.3 }}
           >
-            {viewMode === 'portal' && <HomePortal />}
-            {viewMode === 'student' && <StudentDashboard />}
+            {viewMode === 'portal' && <HomePortal onNavigate={(mode) => setViewMode(mode)} />}
+            {viewMode === 'student' && <StudentDashboard onNavigate={(mode) => setViewMode(mode)} />}
             {viewMode === 'teacher' && <TeacherDashboard />}
+            {viewMode === 'recruitment' && <RecruitmentBoard />}
           </motion.div>
         </AnimatePresence>
       </main>

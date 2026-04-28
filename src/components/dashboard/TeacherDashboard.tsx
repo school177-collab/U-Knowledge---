@@ -60,8 +60,8 @@ function TeacherMain() {
                   데이터로 <span className="text-brand-primary">지원</span>하는<br />질문 중심 수업 모델
                 </h2>
                 <div className="flex gap-4">
-                   <Button variant="primary" className="rounded-2xl px-8 py-5 text-base shadow-xl shadow-brand-primary/20">자료 관리 <Database size={18} className="ml-2" /></Button>
-                   <Button variant="secondary" className="rounded-2xl px-8 py-5 text-base">활동 게시판</Button>
+                   <Button variant="primary" className="rounded-2xl px-8 py-5 text-base shadow-xl shadow-brand-primary/20" onClick={() => setActiveTab('archive')}>자료 관리 <Database size={18} className="ml-2" /></Button>
+                   <Button variant="secondary" className="rounded-2xl px-8 py-5 text-base" onClick={() => setActiveTab('monitoring')}>활동 게시판</Button>
                 </div>
              </div>
              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-80 h-80 opacity-[0.03] rotate-12 text-brand-primary">
@@ -73,10 +73,10 @@ function TeacherMain() {
         {/* Action Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
            {[
-             { icon: Upload, title: '자료 업로드', sub: '학습지 및 과제', color: 'bg-indigo-50 text-brand-primary' },
-             { icon: Activity, title: '학급 분석', sub: '활동 데이터 통계', color: 'bg-purple-50 text-purple-500' },
-             { icon: FileText, title: '학생 평가', sub: '활동 기록부 작성', color: 'bg-blue-50 text-blue-500' },
-             { icon: Bell, title: '전체 공지', sub: '알림 메시지 전송', color: 'bg-red-50 text-red-500' },
+             { icon: Upload, title: '자료 업로드', sub: '학습지 및 과제', color: 'bg-indigo-50 text-brand-primary', action: () => alert('새로운 자료 업로드 창을 엽니다.') },
+             { icon: Activity, title: '학급 분석', sub: '활동 데이터 통계', color: 'bg-purple-50 text-purple-500', action: () => alert('학급별 심층 분석 리포트를 생성합니다.') },
+             { icon: FileText, title: '학생 평가', sub: '활동 기록부 작성', color: 'bg-blue-50 text-blue-500', action: () => alert('생활기록부 연동 평가 창을 호출합니다.') },
+             { icon: Bell, title: '전체 공지', sub: '알림 메시지 전송', color: 'bg-red-50 text-red-500', action: () => alert('전체 학생 대상 푸시 알림을 발송합니다.') },
            ].map((item, idx) => (
              <motion.div
                key={idx}
@@ -84,7 +84,7 @@ function TeacherMain() {
                animate={{ opacity: 1, y: 0 }}
                transition={{ delay: idx * 0.1 }}
              >
-               <Card className="hover:border-brand-primary/30 transition-all cursor-pointer group">
+               <Card className="hover:border-brand-primary/30 transition-all cursor-pointer group" onClick={item.action}>
                   <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110", item.color)}>
                      <item.icon size={22} />
                   </div>
@@ -132,7 +132,7 @@ function TeacherArchive() {
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {subjects.map((sub, idx) => (
-               <Card key={idx} className="flex flex-col items-center justify-center gap-4 hover:border-brand-primary/40 cursor-pointer text-center group">
+               <Card key={idx} onClick={() => alert(`${sub} 과목 질문 아카이브를 불러옵니다.`)} className="flex flex-col items-center justify-center gap-4 hover:border-brand-primary/40 cursor-pointer text-center group">
                   <div className="w-14 h-14 rounded-3xl bg-slate-50 group-hover:bg-brand-primary/5 group-hover:text-brand-primary flex items-center justify-center transition-all">
                      <FolderKanban size={24} className="text-slate-400 transition-colors group-hover:text-brand-primary" />
                   </div>

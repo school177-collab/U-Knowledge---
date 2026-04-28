@@ -1,12 +1,16 @@
 import React from 'react';
 import { cn } from '../../lib/utils';
 
-export function Card({ children, className, title, subtitle }: { children: React.ReactNode; className?: string; title?: string; subtitle?: string }) {
+export function Card({ children, className, title, subtitle, onClick }: { children: React.ReactNode; className?: string; title?: string; subtitle?: string; onClick?: () => void }) {
   return (
-    <div className={cn(
-      "bg-white border border-slate-200 rounded-3xl overflow-hidden portal-shadow",
-      className
-    )}>
+    <div 
+      onClick={onClick}
+      className={cn(
+        "bg-white border border-slate-200 rounded-3xl overflow-hidden portal-shadow",
+        onClick && "cursor-pointer",
+        className
+      )}
+    >
       {title && (
         <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div>
@@ -54,11 +58,12 @@ export function Button({
   );
 }
 
-export function Badge({ children, className, variant = 'default' }: { children: React.ReactNode; className?: string; variant?: 'default' | 'brand' | 'success' }) {
+export function Badge({ children, className, variant = 'default' }: { children: React.ReactNode; className?: string; variant?: 'default' | 'brand' | 'success' | 'portal' }) {
   const variants = {
     default: "bg-slate-100 text-slate-500",
     brand: "bg-indigo-50 text-brand-primary border-indigo-100",
-    success: "bg-emerald-50 text-emerald-600 border-emerald-100"
+    success: "bg-emerald-50 text-emerald-600 border-emerald-100",
+    portal: "bg-brand-primary text-white border-brand-primary shadow-sm"
   };
   
   return (
