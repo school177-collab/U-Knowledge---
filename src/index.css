@@ -1,24 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@100;400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Outfit:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Pretendard", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  --color-neon-blue: #00f2ff;
-  --color-neon-purple: #9d00ff;
+  --color-brand-primary: #4338ca;
+  --color-brand-secondary: #06b6d4;
+  --color-brand-accent: #6366f1;
 }
 
 @layer base {
   body {
-    @apply antialiased;
+    @apply antialiased bg-[#f8faff] text-slate-900;
   }
 }
 
-.glow-text {
-  text-shadow: 0 0 10px rgba(0, 242, 255, 0.4);
+.portal-shadow {
+  box-shadow: 0 10px 40px -10px rgba(67, 56, 202, 0.08);
 }
 
-.glass {
-  @apply bg-[#151619]/60 backdrop-blur-xl border border-white/10;
+.neon-glow {
+  box-shadow: 0 0 15px rgba(67, 56, 202, 0.2);
+}
+
+.glass-bright {
+  @apply bg-white/70 backdrop-blur-md border border-white/40;
 }

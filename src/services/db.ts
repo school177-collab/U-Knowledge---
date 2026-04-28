@@ -116,3 +116,54 @@ export async function likeQuestion(questionId: string) {
     handleFirestoreError(error, OperationType.WRITE, path);
   }
 }
+
+// Comment Services
+export async function addComment(questionId: string, authorId: string, authorName: string, content: string) {
+  const path = `questions/${questionId}/comments`;
+  try {
+    const commentRef = doc(collection(db, 'questions', questionId, 'comments'));
+    await setDoc(commentRef, {
+      questionId,
+      authorId,
+      authorName,
+      content,
+      createdAt: serverTimestamp(),
+    });
+    
+    // Update question's comment count
+    await updateDoc(doc(db, 'questions', questionId), {
+      commentsCount: increment(1)
+    });
+    
+    return commentRef.id;
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, path);
+  }
+}
+
+export function subscribeComments(questionId: string, callback: (comments: Comment[]) => void) {
+  const q = query(collection(db, 'questions', questionId, 'comments'), orderBy('createdAt', 'asc'));
+  return onSnapshot(q, (snapshot) => {
+    const comments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Comment));
+    callback(comments);
+  }, (error) => {
+    handleFirestoreError(error, OperationType.LIST, `questions/${questionId}/comments`);
+  });
+}
+
+// Ranking Services
+export function subscribeRankings(callback: (rankings: any[]) => void) {
+  const q = query(collection(db, 'questions'), orderBy('likesCount', 'desc'), limit(10));
+  return onSnapshot(q, (snapshot) => {
+    const rankings = snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        authorName: data.authorName,
+        authorGrade: data.authorGrade,
+        authorClass: data.authorClass,
+        totalScore: (data.likesCount || 0) + (data.commentsCount || 0)
+      };
+    });
+    callback(rankings);
+  });
+}

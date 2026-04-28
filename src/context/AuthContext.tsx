@@ -21,26 +21,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
-      setUser(firebaseUser);
-      if (firebaseUser) {
-        let userProfile = await getUserProfile(firebaseUser.uid);
-        if (!userProfile) {
-          // New user
-          const newProfile: Partial<UserProfile> = {
-            uid: firebaseUser.uid,
-            email: firebaseUser.email || '',
-            displayName: firebaseUser.displayName || 'Guest',
-            photoURL: firebaseUser.photoURL || '',
-            role: 'student'
-          };
-          await createUserProfile(newProfile);
-          userProfile = await getUserProfile(firebaseUser.uid);
+      try {
+        console.log("Auth State Changed:", firebaseUser?.uid);
+        setUser(firebaseUser);
+        if (firebaseUser) {
+          let userProfile = await getUserProfile(firebaseUser.uid);
+          if (!userProfile) {
+            console.log("Creating new profile for:", firebaseUser.uid);
+            const newProfile: Partial<UserProfile> = {
+              uid: firebaseUser.uid,
+              email: firebaseUser.email || '',
+              displayName: firebaseUser.displayName || 'Guest',
+              photoURL: firebaseUser.photoURL || '',
+              role: 'student'
+            };
+            await createUserProfile(newProfile);
+            userProfile = await getUserProfile(firebaseUser.uid);
+          }
+          setProfile(userProfile);
+        } else {
+          setProfile(null);
         }
-        setProfile(userProfile);
-      } else {
-        setProfile(null);
+      } catch (err) {
+        console.error("Auth initialization error:", err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return () => unsubscribe();

@@ -2,5 +2,5 @@
   "name": "U Knowledge - 질문하는 학교",
   "description": "학교 전체 질문 문화 플랫폼: 질문, 탐구, 공유, 성장, 보상의 선순환 구조를 가진 학습 생태계",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": ["PWA", "Firebase", "AI Feedback"]
 }

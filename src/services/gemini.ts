@@ -1,9 +1,21 @@
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY as string });
+let genAI: GoogleGenAI | null = null;
+
+function getGenAI() {
+  if (!genAI) {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey || apiKey === "undefined") {
+      throw new Error("GEMINI_API_KEY is not configured.");
+    }
+    genAI = new GoogleGenAI({ apiKey });
+  }
+  return genAI;
+}
 
 export async function getAIFeedback(questionContent: string) {
   try {
+    const ai = getGenAI();
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `You are an educational assistant for a school's question culture platform.
@@ -30,6 +42,7 @@ export async function getAIFeedback(questionContent: string) {
 
 export async function improveQuestion(questionContent: string): Promise<string> {
   try {
+    const ai = getGenAI();
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `학생이 작성한 질문입니다: "${questionContent}"

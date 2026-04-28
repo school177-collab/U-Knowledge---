@@ -1,0 +1,16 @@
+{
+  "name": "U Knowledge - 질문하는 학교",
+  "short_name": "U-KNOWLEDGE",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4338ca",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/nolan/512/knowledge-sharing.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

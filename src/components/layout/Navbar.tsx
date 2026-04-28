@@ -1,77 +1,80 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Button } from '../ui/LayoutComponents';
-import { LogOut, Bell, Search, Hexagon } from 'lucide-react';
+import { LogOut, Bell, BookOpen, Settings, Zap } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
-export function Navbar() {
+interface NavbarProps {
+  viewMode: 'portal' | 'student' | 'teacher';
+  setViewMode: (mode: 'portal' | 'student' | 'teacher') => void;
+}
+
+export function Navbar({ viewMode, setViewMode }: NavbarProps) {
   const { profile, logout } = useAuth();
 
   return (
-    <nav className="border-b border-white/5 bg-[#0a0b10]/80 backdrop-blur-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#00f2ff]/20 flex items-center justify-center border border-[#00f2ff]/40">
-              <Hexagon className="text-[#00f2ff] fill-[#00f2ff]/20" size={18} />
+    <nav className="border-b border-slate-200 bg-white/80 backdrop-blur-lg sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 flex items-center justify-between">
+        <div className="flex items-center gap-10">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setViewMode('portal')}>
+            <div className="w-10 h-10 rounded-xl bg-brand-primary flex items-center justify-center shadow-lg shadow-brand-primary/20">
+              <BookOpen className="text-white" size={22} />
             </div>
-            <span className="font-black text-xl tracking-tighter text-white">U-KNOWLEDGE</span>
+            <div>
+               <h1 className="font-black text-xl tracking-tighter text-slate-900 leading-none">문화고</h1>
+               <span className="text-[11px] font-bold text-brand-primary uppercase tracking-widest leading-none">질문하는 학교</span>
+            </div>
           </div>
 
-          <div className="hidden md:flex items-center gap-6">
-            <NavLink active>질문 광장</NavLink>
-            <NavLink>데이터 분석</NavLink>
-            <NavLink>질문 탐정단</NavLink>
-            <NavLink>아카이브</NavLink>
+          <div className="hidden lg:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+            <button 
+              onClick={() => setViewMode('student')}
+              className={cn(
+                "px-4 py-1.5 rounded-lg text-sm font-bold transition-all",
+                viewMode === 'student' ? "bg-white text-brand-primary shadow-sm" : "text-slate-400 hover:text-slate-600"
+              )}
+            >
+              학생 모드
+            </button>
+            <button 
+               onClick={() => setViewMode('teacher')}
+               className={cn(
+                "px-4 py-1.5 rounded-lg text-sm font-bold transition-all",
+                viewMode === 'teacher' ? "bg-white text-brand-primary shadow-sm" : "text-slate-400 hover:text-slate-600"
+              )}
+            >
+              교사 모드
+            </button>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-white/40 group focus-within:border-[#00f2ff]/40 transition-all">
-            <Search size={14} />
-            <input 
-              type="text" 
-              placeholder="질문 검색..." 
-              className="bg-transparent border-none text-xs focus:outline-none focus:ring-0 w-32 focus:w-48 transition-all"
-            />
+        <div className="flex items-center gap-5">
+          <div className="hidden sm:flex items-center gap-3 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg">
+            <Settings size={16} className="text-slate-400" />
+            <span className="text-xs font-bold text-slate-600">1-1</span>
           </div>
 
-          <button className="p-2 text-white/40 hover:text-white transition-colors relative">
+          <div className="flex items-center gap-2 px-4 py-1.5 bg-indigo-50 border border-indigo-100 rounded-xl">
+             <Zap size={16} className="text-brand-primary fill-brand-primary" />
+             <span className="text-sm font-black text-brand-primary">{profile?.points || 250} XP</span>
+          </div>
+
+          <button className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:text-brand-primary hover:bg-slate-100 transition-all">
             <Bell size={20} />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-[#00f2ff] rounded-full border border-[#0a0b10]" />
           </button>
 
-          <div className="h-8 w-px bg-white/10" />
-
-          <div className="flex items-center gap-3 pl-2">
-            <div className="text-right hidden sm:block">
-              <div className="text-xs font-bold text-white leading-tight">{profile?.displayName}</div>
-              <div className="text-[10px] text-[#00f2ff] uppercase font-mono leading-none">{profile?.role}</div>
+          <div className="flex items-center gap-3 pl-2 border-l border-slate-200">
+            <div className="w-10 h-10 rounded-full bg-slate-200 border-2 border-white shadow-sm overflow-hidden">
+               {profile?.photoURL && <img src={profile.photoURL} alt="profile" className="w-full h-full object-cover" />}
             </div>
             <button 
               onClick={logout}
-              className="p-1.5 hover:bg-red-500/10 hover:text-red-400 text-white/40 rounded-lg transition-all"
-              title="로그아웃"
+              className="text-slate-400 hover:text-red-500 transition-colors"
             >
-              <LogOut size={18} />
+              <LogOut size={20} />
             </button>
           </div>
         </div>
       </div>
     </nav>
-  );
-}
-
-function NavLink({ children, active = false }: { children: React.ReactNode; active?: boolean }) {
-  return (
-    <a 
-      href="#" 
-      className={cn(
-        "text-sm font-medium transition-colors hover:text-white",
-        active ? "text-[#00f2ff]" : "text-white/40"
-      )}
-    >
-      {children}
-    </a>
   );
 }

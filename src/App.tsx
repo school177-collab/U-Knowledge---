@@ -1,17 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LoginView } from './components/auth/LoginView';
-import { QuestionBoard } from './components/dashboard/QuestionBoard';
-import { Sidebar } from './components/dashboard/Sidebar';
+import { HomePortal } from './components/dashboard/HomePortal';
+import { StudentDashboard } from './components/dashboard/StudentDashboard';
+import { TeacherDashboard } from './components/dashboard/TeacherDashboard';
 import { Navbar } from './components/layout/Navbar';
+import { FloatingAI } from './components/dashboard/FloatingAI';
+import { motion, AnimatePresence } from 'motion/react';
+
+type ViewMode = 'portal' | 'student' | 'teacher';
 
 function MainApp() {
   const { user, loading } = useAuth();
+  const [viewMode, setViewMode] = useState<ViewMode>('portal');
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0b10] flex items-center justify-center">
-        <div className="w-12 h-12 border-2 border-[#00f2ff]/20 border-t-[#00f2ff] rounded-full animate-spin" />
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <motion.div 
+          animate={{ scale: [1, 1.1, 1], rotate: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="w-12 h-12 bg-brand-primary rounded-xl"
+        />
       </div>
     );
   }
@@ -21,22 +31,31 @@ function MainApp() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0b10] text-white selection:bg-[#00f2ff]/30">
-      <Navbar />
+    <div className="min-h-screen bg-[#f8faff] text-slate-900 selection:bg-brand-primary/10">
+      <Navbar viewMode={viewMode} setViewMode={setViewMode} />
       
-      <main className="max-w-7xl mx-auto px-4 md:px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
-          <QuestionBoard />
-          <aside className="hidden lg:block">
-            <Sidebar />
-          </aside>
-        </div>
+      <main className="max-w-[1440px] mx-auto px-6 py-12 md:px-12 md:py-20 lg:px-20">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={viewMode}
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            transition={{ duration: 0.3 }}
+          >
+            {viewMode === 'portal' && <HomePortal />}
+            {viewMode === 'student' && <StudentDashboard />}
+            {viewMode === 'teacher' && <TeacherDashboard />}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
-      {/* Atmospheric backgrounds for main app */}
+      <FloatingAI />
+
+      {/* Atmospheric backgrounds */}
       <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
-         <div className="absolute top-[20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#00f2ff]/5 blur-[100px]" />
-         <div className="absolute bottom-[10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/5 blur-[100px]" />
+         <div className="absolute top-[10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-50/50 blur-[120px]" />
+         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-cyan-50/50 blur-[120px]" />
       </div>
     </div>
   );
