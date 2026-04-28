@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { collection, query, onSnapshot } from 'firebase/firestore';
 import { Card, Badge } from '../ui/LayoutComponents';
-import { Users, TrendingUp, Award } from 'lucide-react';
+import { Users, TrendingUp, Award, ChevronRight } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 interface ClassStat {
@@ -42,38 +42,69 @@ export function ClassRanking() {
   }, []);
 
   return (
-    <Card title="학급별 포인트 랭킹" subtitle="우리 반의 활약을 확인하세요!">
-      <div className="p-6 space-y-4">
-        {stats.slice(0, 5).map((stat, idx) => (
-          <div key={`${stat.grade}-${stat.classNum}`} className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 group hover:bg-white hover:border-brand-primary/20 transition-all">
-            <div className={cn(
-              "w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm shrink-0",
-              idx === 0 ? "bg-amber-100 text-amber-600" : 
-              idx === 1 ? "bg-slate-200 text-slate-600" : 
-              idx === 2 ? "bg-orange-100 text-orange-600" : "bg-white text-slate-400"
-            )}>
-              {idx + 1}
-            </div>
-            <div className="flex-1">
-              <h4 className="font-black text-slate-800 text-sm">{stat.grade}학년 {stat.classNum}반</h4>
-              <div className="flex items-center gap-3 mt-1">
-                 <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400">
-                    <Users size={12} /> {stat.studentCount}명
-                 </div>
-                 <div className="flex items-center gap-1 text-[10px] font-bold text-brand-primary">
-                    <TrendingUp size={12} /> {stat.points} XP
-                 </div>
+    <Card title="🏆 학급별 실시간 랭킹" subtitle="우리 반의 포인트가 쌓이면 특별한 혜택이!">
+      <div className="p-6 space-y-6">
+        {stats.slice(0, 6).map((stat, idx) => {
+          const maxPoints = stats[0].points || 1;
+          const percentage = (stat.points / maxPoints) * 100;
+          
+          return (
+            <div key={`${stat.grade}-${stat.classNum}`} className="space-y-2 group">
+              <div className="flex items-center gap-4">
+                <div className={cn(
+                  "w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm shrink-0 shadow-sm border transition-all group-hover:scale-110",
+                  idx === 0 ? "bg-amber-400 text-white border-amber-300 rotate-3" : 
+                  idx === 1 ? "bg-slate-200 text-slate-600 border-slate-100 -rotate-3" : 
+                  idx === 2 ? "bg-orange-300 text-white border-orange-200 rotate-2" : "bg-white text-slate-400 border-slate-100"
+                )}>
+                  {idx + 1}
+                </div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-end mb-2">
+                    <div>
+                      <h4 className="font-black text-slate-800 text-sm">{stat.grade}학년 {stat.classNum}반</h4>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                        <Users size={10} className="inline mr-1" /> {stat.studentCount} Participants
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs font-black text-brand-primary">{stat.points.toLocaleString()} XP</span>
+                      {idx === 0 && <span className="block text-[8px] font-black text-amber-500 uppercase">🏆 Top Class</span>}
+                    </div>
+                  </div>
+                  
+                  {/* Visual Progress Bar */}
+                  <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: `${percentage}%` }}
+                      transition={{ duration: 1, ease: "easeOut" }}
+                      className={cn(
+                        "h-full rounded-full",
+                        idx === 0 ? "bg-gradient-to-r from-amber-400 to-orange-400" : 
+                        idx === 1 ? "bg-slate-300" : 
+                        idx === 2 ? "bg-orange-300" : "bg-indigo-400 opacity-60"
+                      )}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-            {idx === 0 && <Award className="text-amber-500" size={24} />}
-          </div>
-        ))}
+          );
+        })}
         
         {stats.length === 0 && (
-          <div className="py-10 text-center text-slate-400 font-bold text-xs uppercase tracking-widest">
-            데이터를 집계 중입니다...
+          <div className="py-12 text-center border-2 border-dashed border-slate-50 rounded-3xl">
+             <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center mx-auto mb-3">
+                <TrendingUp size={20} className="text-slate-200" />
+             </div>
+             <p className="text-slate-300 font-bold text-xs uppercase tracking-widest">데이터 집계 중...</p>
           </div>
         )}
+
+        <Button variant="secondary" className="w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-brand-primary">
+          View All Class Rankings <ChevronRight size={14} className="ml-1" />
+        </Button>
       </div>
     </Card>
   );

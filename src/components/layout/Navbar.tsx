@@ -70,51 +70,74 @@ export function Navbar({ viewMode, setViewMode }: NavbarProps) {
             </button>
 
             {showSettings && (
-              <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-slate-100 p-4 animate-in fade-in slide-in-from-top-2">
-                <div className="flex justify-between items-center mb-4">
-                  <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Profile Settings</p>
-                  <button onClick={() => setShowSettings(false)} className="text-slate-300 hover:text-slate-500"><Check size={14} /></button>
-                </div>
-                <div className="mb-4">
-                  <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Grade (학년 선택)</p>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[1, 2, 3].map(g => (
-                      <button 
-                        key={g} 
-                        onClick={() => handleUpdateGradeClass(g, profile?.class || 1)}
-                        className={cn(
-                          "py-2 rounded-lg text-xs font-bold transition-all",
-                          profile?.grade === g ? "bg-brand-primary text-white shadow-md shadow-brand-primary/20" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
-                        )}
-                      >
-                        {g}학년
-                      </button>
-                    ))}
+              <div className="absolute top-full right-0 mt-3 w-72 bg-white rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 p-6 animate-in fade-in slide-in-from-top-4 duration-300 z-50">
+                <div className="flex justify-between items-center mb-6">
+                  <div>
+                    <p className="text-[10px] font-black uppercase text-slate-400 tracking-[3px]">Workspace settings</p>
+                    <h4 className="text-sm font-black text-slate-800">나의 학습 환경 설정</h4>
                   </div>
+                  <button onClick={() => setShowSettings(false)} className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-brand-primary transition-colors">
+                    <Check size={16} />
+                  </button>
                 </div>
-                <div>
-                   <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Class (반 선택: 1-9반)</p>
-                   <div className="grid grid-cols-5 gap-2">
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(c => (
+
+                <div className="space-y-6">
+                  <div className="p-4 bg-slate-50/50 rounded-2xl border border-slate-100/50">
+                    <p className="text-[10px] font-black uppercase text-brand-primary tracking-widest mb-3 flex items-center gap-2">
+                       <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" /> Grade (학년)
+                    </p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[1, 2, 3].map(g => (
                         <button 
-                          key={c}
-                          onClick={() => handleUpdateGradeClass(profile?.grade || 1, c)}
+                          key={g}
+                          onClick={() => handleUpdateGradeClass(g, profile?.class || 1)}
                           className={cn(
-                            "py-2 rounded-lg text-[10px] font-bold transition-all",
-                            profile?.class === c ? "bg-brand-primary text-white shadow-md shadow-brand-primary/20" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                            "py-2.5 rounded-xl text-xs font-black transition-all",
+                            profile?.grade === g 
+                              ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/20" 
+                              : "bg-white text-slate-400 border border-slate-100 hover:border-brand-primary/30"
                           )}
                         >
-                          {c}반
+                          {g}학년
                         </button>
                       ))}
-                   </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-slate-50/50 rounded-2xl border border-slate-100/50">
+                    <p className="text-[10px] font-black uppercase text-emerald-500 tracking-widest mb-3 flex items-center gap-2">
+                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Class (반: 1~9반)
+                    </p>
+                    <div className="grid grid-cols-5 gap-2">
+                       {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(c => (
+                         <button 
+                           key={c}
+                           onClick={() => handleUpdateGradeClass(profile?.grade || 1, c)}
+                           className={cn(
+                             "py-2 rounded-lg text-[10px] font-black transition-all",
+                             profile?.class === c 
+                               ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20" 
+                               : "bg-white text-slate-400 border border-slate-100 hover:border-emerald-500/30"
+                           )}
+                         >
+                           {c}반
+                         </button>
+                       ))}
+                    </div>
+                  </div>
                 </div>
-                <div className="mt-4 pt-4 border-t border-slate-50">
+
+                <div className="mt-8 pt-6 border-t border-slate-50">
                   <button 
-                    onClick={() => { alert('로그아웃 하시겠습니까?'); logout(); }}
-                    className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-black text-red-500 hover:bg-red-50 transition-all"
+                    onClick={() => {
+                      if(window.confirm('로그아웃 하시겠습니까?')) {
+                        logout();
+                        setShowSettings(false);
+                      }
+                    }}
+                    className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-xs font-black text-red-500 bg-red-50/30 hover:bg-red-50 transition-all border border-red-100/50"
                   >
-                    <LogOut size={14} /> 로그아웃
+                    <LogOut size={16} /> 안전하게 로그아웃
                   </button>
                 </div>
               </div>

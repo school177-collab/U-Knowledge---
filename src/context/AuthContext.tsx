@@ -20,27 +20,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
+    let unsubscribeProfile: (() => void) | undefined;
+
+    const unsubscribeAuth = auth.onAuthStateChanged(async (firebaseUser) => {
       try {
         console.log("Auth State Changed:", firebaseUser?.uid);
         setUser(firebaseUser);
+        
         if (firebaseUser) {
-          let userProfile = await getUserProfile(firebaseUser.uid);
-          if (!userProfile) {
+          // Check if profile exists, if not create it
+          const existingProfile = await getUserProfile(firebaseUser.uid);
+          if (!existingProfile) {
             console.log("Creating new profile for:", firebaseUser.uid);
-            const newProfile: Partial<UserProfile> = {
+            await createUserProfile({
               uid: firebaseUser.uid,
               email: firebaseUser.email || '',
               displayName: firebaseUser.displayName || 'Guest',
               photoURL: firebaseUser.photoURL || '',
-              role: 'student'
-            };
-            await createUserProfile(newProfile);
-            userProfile = await getUserProfile(firebaseUser.uid);
+              role: 'student',
+              points: 0,
+              grade: 1,
+              class: 1
+            });
           }
-          setProfile(userProfile);
+
+          // Subscribe to real-time profile updates
+          const { doc, onSnapshot } = await import('firebase/firestore');
+          const { db } = await import('../lib/firebase');
+          
+          unsubscribeProfile = onSnapshot(doc(db, 'users', firebaseUser.uid), (doc) => {
+            if (doc.exists()) {
+              setProfile(doc.data() as UserProfile);
+            }
+          });
         } else {
           setProfile(null);
+          if (unsubscribeProfile) unsubscribeProfile();
         }
       } catch (err) {
         console.error("Auth initialization error:", err);
@@ -49,7 +64,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeProfile) unsubscribeProfile();
+    };
   }, []);
 
   const login = async () => {
